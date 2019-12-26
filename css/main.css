@@ -211,7 +211,7 @@ p + p {
 
 .meta {
   font-family: halyard-text, sans-serif;
-  margin-top: 1rem;
+  margin-top: 1.4rem;
   font-size: 0.9rem;
   text-transform: uppercase;
   font-kerning: none;
@@ -230,7 +230,7 @@ p + p {
   font-size: calc(3.4rem + 0.75vw);
   line-height: 3rem;
   float: left;
-  padding-right: 0.4rem;
+  padding-right: 0.2rem;
   text-transform: uppercase;
 }
 
