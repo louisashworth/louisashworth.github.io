@@ -5,6 +5,8 @@
 <title>{{ page.title }}</title>
 <meta name="viewport" content="width=device-width">
 <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="tgvashworth atom feed" />
+<link rel="stylesheet" href="https://use.typekit.net/kfq6ruy.css">
+<link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="{{ page.title }}" />
@@ -21,7 +23,7 @@
 
 <div class="container">
   <header class="header">
-    <h1 class="title"><a class="alt-2" href="/">{{ site.name }}</a></h1>
+    <h1 class="title"><a class="alt-2" href="/">Louis Ashworth</a></h1>
   </header>
 
   {{ content }}
@@ -29,15 +31,76 @@
   <footer class="footer">
     <div class="contact">
       <p>
-        <strong>Tom Ashworth</strong><br />
-        <a href="mailto:tgvashworth@gmail.com">tgvashworth@gmail.com</a>
+        Louis Ashworth<br />
+        <a href="mailto:louisashworth94@gmail.com">louisashworth94@gmail.com</a>
       </p>
     </div>
     <div class="contact">
       <p>
-        <a href="https://github.com/tgvashworth">github.com/tgvashworth</a><br />
-        <a href="https://twitter.com/tgvashworth">twitter.com/tgvashworth</a><br />
+        <a href="">something here, number maybe?</a><br />
+        <a href="https://twitter.com/louis_ashworth">twitter.com/louis_ashworth</a><br />
+      </p>
+    </div>
+    <div class="spiel">
+      <p>
+        All content on site © Louis Ashworth unless otherwise stated. Headshot © Anna Menin. Built with help from <a href="https://twitter.com/tgvashworth">Tom Ashworth</a>.
       </p>
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    // Don't run this JS if classList isn't supported
+    if (!'classList' in document.body) return;
+
+    // Find all footnote links and hook em up
+    var footnotes = document.querySelectorAll('a.footnote');
+    Array.prototype.forEach.call(footnotes, function (note) {
+      var targetId = note.href.replace(/.*#/, '');
+      if (!targetId) return;
+
+      // Find the list element that has the matching ID
+      var target = document.getElementById(targetId);
+      if (!target) return;
+
+      var footnoteParagraph = target.firstElementChild;
+      if (!footnoteParagraph) return;
+      // Add a class to the footnote content paragraph so that it behaves
+      // correctly when the associated foonote is clicked.
+      footnoteParagraph.classList.add('footnote-content');
+      // Find the closest paragraph to the footnote link and add the
+      // footnote content paragrah adjacted to it.
+      findParent("p", note).insertAdjacentElement('afterend', footnoteParagraph);
+      // We don't need the target list element any more...
+      target.parentNode.removeChild(target);
+      // ...but we can copy the ID over.
+      footnoteParagraph.setAttribute('id', targetId);
+
+      // When the note itself is clicked, toggle the "footnote-shown" class.
+      note.addEventListener('click', function (event) {
+        // This prevents the page jumping
+        event.preventDefault();
+        footnoteParagraph.classList.toggle('footnote-shown');
+      });
+    });
+  });
+
+  /**
+   * Find a parent node that matches a particular tag name.
+   *
+   * For example:
+       findParent("p", event.target);
+   */
+  function findParent(tagName, node) {
+    if (node.parentNode) {
+      if (node.parentNode.tagName.toLowerCase() === tagName) {
+        return node.parentNode;
+      } else {
+        return findParent(tagName, node.parentNode);
+      }
+    }
+  }
+}());
+</script>

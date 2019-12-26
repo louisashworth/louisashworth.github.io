@@ -1,5 +1,7 @@
 html {
-  font: 18px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: freight-text-pro, serif;
+  font-size: 18px;
+  line-height: 27px;
 }
 
 @media print {
@@ -9,9 +11,16 @@ html {
 }
 
 body {
-  background: #FCFDFF;
+  background: #f3fcfb;
   color: #001514;
   margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.74rem;
+  hyphens: auto;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  font-variant-numeric: oldstyle;
+  hanging-punctuation: first;
 }
 
 @media print {
@@ -54,14 +63,18 @@ img {
 }
 
 img.me {
-  width: 70px;
-  border-radius: 35px;
-  margin-bottom: 1em
+  width: 6rem;
+  height: 100%;
+  border-radius: 6rem;
+  margin-bottom: 0em;
+  float: right;
+  margin-left: 1rem;
 }
 
 img.me-small {
   height: 20px;
-  border-radius: 10px
+  border-radius: 10px;
+  float: right;
 }
 
 .header {
@@ -69,30 +82,60 @@ img.me-small {
 }
 
 .header h1 {
-  font-size: 1rem;
-  margin: 0.5rem 0;
+  font-size: 1.6rem;
+  line-height: 3.2rem;
+  margin: 0.5rem 0 0 0;
   font-weight: normal;
 }
 
-blockquote {
-  font-style: italic;
-  color: #555;
-  margin: 1em 2em;
+h1,h2,h3 {
+  font-family: halyard-display, sans-serif;
+  font-weight: 500;
+}
+
+h1, .h1 {
+  font-size: 4.2rem;
+  line-height: 4.2rem;
+  margin-bottom: 3rem;
+}
+
+h2, .h2 {
+  font-size: 2.6rem;
+  line-height: 2.6rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+h3, .h3 {
+  font-size: 1.6rem;
+  line-height: 1.6rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin: 0;
+}
+
+p + p {
+  text-indent: 1em;
 }
 
 .mini-about {
-  max-width: 14em;
-  margin: 0 auto;
-  text-align: center;
-  padding: 2em 0 1em;
+  text-align: left;
+  padding-top: 1.4rem;
+  hyphens: none;
 }
 
 .mini-about p {
-  margin-top: 0
+  margin-top: 0.2rem;
 }
 
 .footer {
+  font-family: halyard-text, sans-serif;
   border-top: 1px solid #eee;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
   margin: 1.5em 0;
   overflow: hidden;
   padding-top: 1.5rem;
@@ -105,6 +148,16 @@ blockquote {
 
 .contact p {
   margin: 0;
+}
+
+.spiel {
+  margin-top: 2rem;
+  float: left;
+  max-width: 20rem;
+  font-size: 0.7rem;
+  line-height: 0.9rem;
+  font-weight: 200;
+  color: #565656;
 }
 
 @media (max-width: 31em) {
@@ -131,18 +184,47 @@ blockquote {
 
 .post-title {
   margin-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 3rem;
 }
 
 .date {
-  font: 0.667em monospace;
-  padding-right: 1em;
+  font-family: halyard-text, sans-serif;
+  padding-right: 0.5em;
+  font-size: 0.6rem;
+  line-height: 0.8rem;
+  text-transform: uppercase;
+  font-kerning: none;
+  letter-spacing: 0.04rem;
+  width: 100%;
+  display: block;
 }
 
 .meta {
-  margin: 0;
+  font-family: halyard-text, sans-serif;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-kerning: none;
+  letter-spacing: 0.08rem;
 }
 
 /* standard */
+
+.post {
+  margin-top: 1rem;
+}
+
+.post:first-letter {
+  font-family: halyard-display, sans-serif;
+  font-weight: 200;
+  font-size: calc(3.4rem + 0.75vw);
+  line-height: 3rem;
+  float: left;
+  padding-right: 0.4rem;
+  text-transform: uppercase;
+}
+
 .post pre {
   border: 1px solid #D6D7D8;
   background-color: #F7F8F9;
@@ -156,7 +238,6 @@ blockquote {
 }
 
 .post code {
-  font-family: monospace;
   font-size: 0.9em;
   border: 1px solid #D6D7D8;
   background-color: #F7F8F9;
@@ -167,6 +248,11 @@ blockquote {
   border: none;
   line-height: 1.1;
   padding: 0;
+}
+
+.post i {
+  font-size: 0.9rem;
+  margin-top: -0.2rem;
 }
 
 /* terminal */
@@ -180,9 +266,19 @@ blockquote {
   background-color: #333;
 }
 
+.post img {
+  padding: 1 -1rem;
+}
+
+blockquote {
+  margin: 1em 2em;
+  font-size: 1.1rem;
+  line-height: 1.4rem;
+}
+
 hr {
   border: none;
-  border-top: 1px solid #D6D7D8;
+  border-top: 1px solid grey;
   width: 100%;
   max-width: 10em;
   margin: 2em auto;
@@ -193,3 +289,29 @@ hr {
   width: 100%;
   margin: 0 auto;
 }
+
+
+/* Footnote */
+
+.footnote-content {
+  display: none;
+}
+
+p + .footnote-content {
+  text-indent: 0;
+  margin-left: 1.5em;
+  font-size: 0.9rem;
+  line-height: 1.1rem;
+}
+
+.footnote-shown {
+  display: block;
+}
+
+.footnote-content .reversefootnote {
+  display: none;
+}
+
+/* .footnote-footnote:target {
+  display: block;
+} */

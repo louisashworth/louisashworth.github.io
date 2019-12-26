@@ -1,17 +1,16 @@
 ---
 layout: default
-title: "Tom Ashworth"
+title: "Louis Ashworth"
 ---
 
 <div id="home">
     <section class="mini-about">
-      <img class="me" src="/images/sousa.jpg" width="70" height="70">
-      <p>Hi, I'm <a href="//twitter.com/tgvashworth">Tom</a>. Around the web I'm <strong>tgvashworth</strong>. I write <a href="//github.com/tgvashworth">code</a> and work at <a href="//bulb.co.uk">Bulb</a>.
-      <br><br><a class="alt" href="mailto:tgvashworth@gmail.com?subject=Hello">We should talk.</a></p>
+      <img class="me" src="https://pbs.twimg.com/profile_images/1055451298588516352/L22dd0jx_400x400.jpg" width="70" height="70">
+      <p><a href="//twitter.com/louis_ashworth">Louis Ashworth</a> is a reporter for the Telegraph. He has previously worked for City AM and The Week, and has written for national publications including the Guardian, Independent, i, Sunday Times and Times. <br /> <br />This site is a work in progress.</p>
     </section>
   <ul class="posts">
     {% for post in site.posts %}
-      <li><span class="date">{{ post.date | date_to_string }}</span> <a href="{{ post.url }}">{{ post.title }}</a></li>
+      <li><span class="date">{{ post.date | date_to_string }} /</span> <a href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>
 </div>
