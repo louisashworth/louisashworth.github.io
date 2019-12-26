@@ -58,6 +58,15 @@ a.alt-2:hover {
   border-bottom: none;
 }
 
+sup, sub {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+}
+sub {
+  top: 0.4em;
+}
+
 img {
   max-width: 100%
 }
@@ -94,8 +103,8 @@ h1,h2,h3 {
 }
 
 h1, .h1 {
-  font-size: 4.2rem;
-  line-height: 4.2rem;
+  font-size: 3.6rem;
+  line-height: 3.6rem;
   margin-bottom: 3rem;
 }
 
@@ -300,6 +309,7 @@ hr {
 p + .footnote-content {
   text-indent: 0;
   margin-left: 1.5em;
+  margin-right: 2rem;
   font-size: 0.9rem;
   line-height: 1.1rem;
 }
