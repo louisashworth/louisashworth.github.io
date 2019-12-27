@@ -103,21 +103,21 @@ h1,h2,h3 {
 }
 
 h1, .h1 {
-  font-size: 3.6rem;
-  line-height: 3.6rem;
-  margin-bottom: 3rem;
+  font-size: 3.2rem;
+  line-height: 3.2rem;
+  margin-bottom: 2.8rem;
 }
 
 h2, .h2 {
-  font-size: 2.6rem;
-  line-height: 2.6rem;
+  font-size: 2.1rem;
+  line-height: 2.1rem;
   margin-top: 3rem;
   margin-bottom: 2rem;
 }
 
 h3, .h3 {
-  font-size: 1.6rem;
-  line-height: 1.6rem;
+  font-size: 1.8rem;
+  line-height: 1.8rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
@@ -290,7 +290,7 @@ hr {
   border-top: 1px solid grey;
   width: 100%;
   max-width: 10em;
-  margin: 2em auto;
+  margin: 1.5em auto 1.8em auto;
 }
 
 .tweet-embed {
@@ -308,8 +308,7 @@ hr {
 
 p + .footnote-content {
   text-indent: 0;
-  margin-left: 1.5em;
-  margin-right: 2rem;
+  margin: 0.1rem 2rem 0.2rem 1.5rem;
   font-size: 0.9rem;
   line-height: 1.1rem;
 }
