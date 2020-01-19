@@ -2,3 +2,4 @@ name: louisashworth
 description: "The personal website of Louis Ashworth."
 markdown: kramdown
 highlighter: rouge
+repository: users/Louis

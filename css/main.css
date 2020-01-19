@@ -43,15 +43,15 @@ body {
 }
 
 a {
-  color: #4183c4;
-  text-decoration: none;
+  color: #008dc8;
   position: relative;
+  text-decoration: none;
 }
 a:focus, a:hover {
   outline: none; /* replaced by pseudo-element */
-  border-bottom: 1px solid;
+  text-decoration-color: #008dc8;
 }
-a:visited { color: #2B5884; }
+a:visited { color: #008dc8; }
 a.alt, a.alt:visited { color: #C17400; }
 a.alt-2, a.alt-2:visited { color: #001514; }
 a.alt-2:hover {
@@ -91,10 +91,14 @@ img.me-small {
 }
 
 .header h1 {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   line-height: 3.2rem;
   margin: 0.5rem 0 0 0;
   font-weight: normal;
+}
+
+.header a {
+  text-decoration: none;
 }
 
 h1,h2,h3 {
@@ -319,6 +323,38 @@ p + .footnote-content {
 
 .footnote-content .reversefootnote {
   display: none;
+}
+
+.popup {
+  position: relative;
+  cursor: help;
+  text-decoration: underline;
+  text-decoration-color: #FC5C7D;
+  text-decoration-thickness: .1em;
+  text-underline-offset: 2px;
+}
+.popup:hover:before {
+    opacity: 1;
+}
+
+.popup:before {
+  content: attr(aria-label);
+  font-family: halyard-text, sans-serif;
+  font-weight: 400;
+  opacity: 0;
+  position: absolute;
+  min-width: 8rem;
+  top: 1.9rem;
+  font-size: 0.8rem;
+  line-height: 1rem;
+  padding: 0.2rem 0.3rem 0.5rem 0.4rem;
+  color: #fff;
+  background-color: #FC5C7D;
+  pointer-events: none;
+  -webkit-box-shadow: 0 0 3px 0 #a9a9a9;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    0 0 3px 0 #a9a9a9;  /* Firefox 3.5 - 3.6 */
+  box-shadow:         0 0 3px 0 #a9a9a9;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+  margin: auto;
 }
 
 /* .footnote-footnote:target {
