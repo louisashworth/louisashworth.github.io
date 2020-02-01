@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  background: #f3fcfb;
+  background: #edfbff;
   color: #001514;
   margin: 0;
   font-size: 1.3rem;
@@ -146,7 +146,7 @@ p + p {
 
 .footer {
   font-family: halyard-text, sans-serif;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #d3d3d3;
   font-size: 0.9rem;
   line-height: 1.2rem;
   margin: 1.5em 0;
