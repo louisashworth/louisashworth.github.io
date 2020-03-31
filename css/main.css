@@ -1,7 +1,6 @@
 html {
   font-family: freight-text-pro, serif;
   font-size: 18px;
-  line-height: 27px;
 }
 
 @media print {
@@ -15,7 +14,8 @@ body {
   color: #001514;
   margin: 0;
   font-size: 1.3rem;
-  line-height: 1.74rem;
+  line-height: 1.65rem;
+  letter-spacing: 0.005em;
   hyphens: auto;
   font-kerning: normal;
   font-variant-ligatures: common-ligatures;
@@ -27,6 +27,10 @@ body {
   body {
     background: transparent;
   }
+}
+
+.of-ornm {
+  font-feature-settings: "ornm";
 }
 
 .container {
@@ -78,6 +82,7 @@ img.me {
   margin-bottom: 0em;
   float: right;
   margin-left: 1rem;
+  margin-top: 0.5rem;
 }
 
 img.me-small {
@@ -104,12 +109,13 @@ img.me-small {
 h1,h2,h3 {
   font-family: halyard-display, sans-serif;
   font-weight: 500;
+  hyphens: none;
 }
 
 h1, .h1 {
-  font-size: 3.2rem;
-  line-height: 3.2rem;
-  margin-bottom: 2.8rem;
+  font-size: 2.4rem;
+  line-height: 2.4rem;
+  margin-bottom: 2.4rem;
 }
 
 h2, .h2 {
@@ -131,7 +137,7 @@ p {
 }
 
 p + p {
-  text-indent: 1em;
+  text-indent: 1.3rem;
 }
 
 .mini-about {
@@ -142,6 +148,16 @@ p + p {
 
 .mini-about p {
   margin-top: 0.2rem;
+}
+
+.spiel {
+  margin-top: 2rem;
+  float: left;
+  max-width: 20rem;
+  font-size: 0.7rem;
+  line-height: 0.9rem;
+  font-weight: 200;
+  color: #565656;
 }
 
 .footer {
@@ -163,20 +179,29 @@ p + p {
   margin: 0;
 }
 
-.spiel {
-  margin-top: 2rem;
-  float: left;
-  max-width: 20rem;
-  font-size: 0.7rem;
-  line-height: 0.9rem;
-  font-weight: 200;
-  color: #565656;
+div.topbanner {
+  font-family: halyard-text, sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  border-top: 1px solid #ffebd4;
+  background-color: #ffebd4;
+  margin: 0 -100%;
+  padding: .3rem .5rem;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
 @media (max-width: 31em) {
   .contact {
     width: 100%;
     float: none;
+  }
+  h1 {
+    font-size: 2.1rem;
+    line-height: 2.1rem;
   }
 }
 
@@ -193,12 +218,17 @@ p + p {
 
 .posts li {
   margin-bottom: 0.444em;
+  margin-left: 0;
 }
 
 .post-title {
   margin-bottom: 0;
   margin-top: 0;
   margin-bottom: 3rem;
+}
+
+.posts ul {
+  padding: 0;
 }
 
 .date {
@@ -216,7 +246,7 @@ p + p {
 .meta {
   font-family: halyard-text, sans-serif;
   margin-top: 1.4rem;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   font-kerning: none;
   letter-spacing: 0.08rem;
@@ -231,7 +261,7 @@ p + p {
 .post:first-letter {
   font-family: halyard-display, sans-serif;
   font-weight: 200;
-  font-size: calc(3.4rem + 0.75vw);
+  font-size: calc(3.2rem + 0.75vw);
   line-height: 3rem;
   float: left;
   padding-right: 0.2rem;
@@ -241,7 +271,7 @@ p + p {
 .post pre {
   border: 1px solid #D6D7D8;
   background-color: #F7F8F9;
-  padding: .4em;
+  padding: 0.2rem 0.4rem 0.4rem 0.4rem;
   overflow-x: scroll;
 }
 
@@ -250,16 +280,19 @@ p + p {
   padding-left: 2em;
 }
 
-.post code {
-  font-size: 0.9em;
+code {
+  font-family: freight-micro-pro, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.6em;
   border: 1px solid #D6D7D8;
   background-color: #F7F8F9;
   padding: 0 .2em;
 }
 
-.post pre code {
+pre code {
   border: none;
-  line-height: 1.1;
+  line-height: 0.7;
   padding: 0;
 }
 
@@ -280,11 +313,32 @@ p + p {
 }
 
 .post img {
-  padding: 1 -1rem;
+  padding: 0;
+  margin: 2rem 0 1.3rem -1.3rem;
+  width: 100%;
+}
+
+li {
+  margin-left: 0.6rem;
+}
+
+img + em {
+  font-family: halyard-text, sans-serif;
+  margin-top: -1.3rem;
+  margin-bottom: 1.3rem;
+  padding: 0 1.3rem 0 1.3rem;
+  float: left;
+  font-style: normal;
+  hyphens: none;
+  text-indent: 0;
+  font-size: 0.7rem;
+  line-height: 0.9rem;
+  font-weight: 200;
+  color: #565656;
 }
 
 blockquote {
-  margin: 1em 2em;
+  margin: 1rem 2rem;
   font-size: 1.1rem;
   line-height: 1.4rem;
 }
@@ -297,12 +351,115 @@ hr {
   margin: 1.5em auto 1.8em auto;
 }
 
+hr + p:first-letter {
+  font-family: halyard-display, sans-serif;
+  font-weight: 200;
+  font-size: calc(3.2rem + 0.75vw);
+  line-height: 3rem;
+  float: left;
+  padding-right: 0.2rem;
+  text-transform: uppercase;
+}
+
 .tweet-embed {
   max-width: 500px;
   width: 100%;
   margin: 0 auto;
 }
 
+.endmatter {
+  font-family: halyard-text, sans-serif;
+  padding-top: 2rem;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  font-kerning: none;
+  padding-bottom: 0.5rem;
+  height: 100%;
+  display: flex;
+  hyphens: none;
+}
+
+.endnavleft {
+  float: left;
+  width: 50%;
+  margin: 0;
+  padding-right: 1rem;
+}
+
+.endnavright {
+  float: right;
+  width: 50%;
+  margin: 0;
+  text-align: right;
+  padding-left: 1rem;
+}
+
+.return {
+  font-family: halyard-text, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  font-kerning: none;
+}
+
+/* table */
+
+.tableholder {
+  overflow-x: auto;
+}
+
+table {
+  font-family: halyard-text, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.3rem;
+  font-weight: 200;
+  font-feature-settings: "tnum";
+  margin: 1rem 2rem 1.3rem 2rem;
+  text-align: left;
+  border-collapse: collapse;
+  border-spacing: 0.5rem;
+  empty-cells: hide;
+  max-width: 100%;
+}
+
+th, td {
+  padding: 0.2rem 1rem 0.3rem 0.2rem;
+}
+
+td {
+  hyphens: auto;
+  vertical-align: baseline;
+  white-space: normal;
+  text-overflow: ellipsis;
+  min-width: 5rem;
+}
+
+th {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.4rem;
+  vertical-align: bottom;
+}
+
+td em {
+  font-style: italic;
+  font-size: 0.9rem;
+  padding-right: 0.4rem;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ffea00;
+}
+
+
+/* highlighter */
+
+.highlighter {
+  background-color: #ffea00;
+  padding: 0rem 0.1rem 0 0.1rem;
+}
 
 /* Footnote */
 
@@ -325,6 +482,12 @@ p + .footnote-content {
   display: none;
 }
 
+.tags {
+  margin-top: 1rem;
+}
+
+/* popup */
+
 .popup {
   position: relative;
   cursor: help;
@@ -341,9 +504,11 @@ p + .footnote-content {
   content: attr(aria-label);
   font-family: halyard-text, sans-serif;
   font-weight: 400;
+  text-align: left;
+  text-indent: 0;
   opacity: 0;
   position: absolute;
-  min-width: 8rem;
+  min-width: 6rem;
   top: 1.9rem;
   font-size: 0.8rem;
   line-height: 1rem;
@@ -354,7 +519,6 @@ p + .footnote-content {
   -webkit-box-shadow: 0 0 3px 0 #a9a9a9;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
   -moz-box-shadow:    0 0 3px 0 #a9a9a9;  /* Firefox 3.5 - 3.6 */
   box-shadow:         0 0 3px 0 #a9a9a9;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
-  margin: auto;
 }
 
 /* .footnote-footnote:target {

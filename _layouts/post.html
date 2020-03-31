@@ -6,4 +6,25 @@ layout: default
 
 <div class="post">
 {{ content }}
+
+<div class="endmatter">
+  <div class="endnavleft">
+    {% if page.previous.url %}
+      <p>&laquo <a href="{{page.previous.url}}">{{page.previous.title}}</a></p>
+    {% endif %}
+  </div>
+  {% if page.next.url %}
+  <div class="endnavright">
+    <p><a href="{{page.next.url}}">{{page.next.title}}</a> &raquo</p>
+  </div>
+  {% endif %}
+</div>
+<br>
+<div class="return">⬑ <a href="#">Back to top</a></div>
+<div class="tags">
+  {% for tag in page.tags %}
+    {% capture tag_name %}{{ tag }}{% endcapture %}
+    <a href="/tag/{{ tag_name }}"><code class="highligher-rouge"><nobr>{{ tag_name }}</nobr></code>&nbsp;</a>
+  {% endfor %}
+</div>
 </div>

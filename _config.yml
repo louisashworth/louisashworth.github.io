@@ -3,3 +3,4 @@ description: "The personal website of Louis Ashworth."
 markdown: kramdown
 highlighter: rouge
 repository: users/Louis
+show_drafts: false
