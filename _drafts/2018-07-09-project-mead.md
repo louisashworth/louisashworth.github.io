@@ -6,7 +6,7 @@ summary: "xxxxx"
 
 Here is some filler text for an example blog lede.
 
-Anna Menin smells really terrible, which is a problem because humans are <span markdown = "0" class="highlighter" >hello this is a good bit ho here</span> conditioned to avoid things which have a putrid[^1] stench.
+Anna Menin smells really terrible schoop de woop, which is a problem because humans are <span markdown = "0" class="highlighter" >hello this is a good bit ho here</span> conditioned to avoid things which have a putrid[^1] stench.
 
 * item 1
 * item 2
