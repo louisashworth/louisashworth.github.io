@@ -182,11 +182,11 @@ p + p {
 div.topbanner {
   font-family: halyard-text, sans-serif;
   font-weight: 300;
-  font-size: 0.9rem;
-  line-height: 1.2rem;
+  font-size: 0.8rem;
+  line-height: 1.1rem;
   border-top: 1px solid #ffebd4;
   background-color: #ffebd4;
-  margin: 0 -100%;
+  margin: 0 0;
   padding: .3rem .5rem;
   text-align: center;
   position: sticky;
