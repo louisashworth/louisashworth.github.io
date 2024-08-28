@@ -1,0 +1,9 @@
+#to view drafts
+
+$ jekyll serve --drafts
+
+#to run codespace auto-updater
+
+gem install bundler jekyll
+bundle update
+bundle exec jekyll serve
