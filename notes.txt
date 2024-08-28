@@ -7,3 +7,7 @@ $ jekyll serve --drafts
 gem install bundler jekyll
 bundle update
 bundle exec jekyll serve
+
+#general stuff
+
+https://jekyllrb.com/docs/posts/
