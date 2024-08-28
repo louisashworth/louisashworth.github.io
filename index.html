@@ -9,7 +9,7 @@ title: "Home"
       <p>Louis Ashworth is a reporter for <a href="https://www.ft.com/alphaville">FT Alphaville</a>. He has previously worked for the Telegraph, City AM and The Week, and has written for national publications including the Guardian, Independent, i, Sunday Times and Times.</p>
     </section>
   <ul class="posts">
-    {% for post in site.posts %}
+    {% for post in site.posts limit:5 %}
       <li><span class="date">{{ post.date | date_to_string }} /</span> <a href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>

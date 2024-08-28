@@ -233,7 +233,9 @@ div.topbanner {
 
 .date {
   font-family: halyard-text, sans-serif;
-  padding-right: 0.5em;
+  padding-right: 0.5rem;
+  padding-bottom: 0.2rem;
+  padding-top: 0.5rem;
   font-size: 0.6rem;
   line-height: 0.8rem;
   text-transform: uppercase;
