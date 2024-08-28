@@ -7,13 +7,14 @@ layout: default
 <div class="post">
 {{ content }}
 
+<div class="tags">
+  {% for tag in page.tags %}
+    {% capture tag_name %}{{ tag }}{% endcapture %}
+    <a href="/tag/{{ tag_name }}"><code class="highligher-rouge"><nobr>{{ tag_name }}</nobr></code>&nbsp;</a>
+  {% endfor %}
+</div>
+
 <div class="endmatter">
-  <div class="tags">
-    {% for tag in page.tags %}
-      {% capture tag_name %}{{ tag }}{% endcapture %}
-      <a href="/tag/{{ tag_name }}"><code class="highligher-rouge"><nobr>{{ tag_name }}</nobr></code>&nbsp;</a>
-    {% endfor %}
-  </div>
   <div class="endnavleft">
     {% if page.previous.url %}
       <p>&laquo <a href="{{page.previous.url}}">{{page.previous.title}}</a></p>
