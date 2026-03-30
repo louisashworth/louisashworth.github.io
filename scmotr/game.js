@@ -4,6 +4,7 @@ const SKYLINE_WIDTH = 640;
 
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
+const gameShellEl = document.querySelector(".game-shell");
 const scoreEl = document.getElementById("score");
 const highScoreEl = document.getElementById("high-score");
 const gameOverStackEl = document.getElementById("game-over-stack");
@@ -246,6 +247,14 @@ function updateHud() {
     highScoreEl.textContent = highScoreText;
     lastHighScoreText = highScoreText;
   }
+  updateOverlayClearance();
+}
+
+function updateOverlayClearance() {
+  const shellRect = gameShellEl.getBoundingClientRect();
+  const hudRect = hudEl.getBoundingClientRect();
+  const hudClearance = Math.max(0, Math.ceil(hudRect.bottom - shellRect.top));
+  gameShellEl.style.setProperty("--hud-clearance", `${hudClearance}px`);
 }
 
 function updateScorePulse(dt = 0) {
@@ -825,6 +834,8 @@ function startIfReady() {
   setHidden(startInstructionEl, false);
   requestAnimationFrame(frame);
 }
+
+window.addEventListener("resize", updateOverlayClearance);
 
 for (const [key, path] of Object.entries(ASSETS)) {
   const image = new Image();
