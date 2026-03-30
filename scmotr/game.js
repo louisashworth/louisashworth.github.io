@@ -6,11 +6,13 @@ const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 const scoreEl = document.getElementById("score");
 const highScoreEl = document.getElementById("high-score");
+const gameOverStackEl = document.getElementById("game-over-stack");
 const messageEl = document.getElementById("message");
 const startInstructionEl = document.getElementById("start-instruction");
 const finalScoreEl = document.getElementById("final-score");
 const timeEffectEl = document.getElementById("time-effect");
 const timeEffectCountdownEl = document.getElementById("time-effect-countdown");
+const hudEl = document.querySelector(".hud");
 
 const ASSETS = {
   sky: "./SVGs/sky.svg",
@@ -40,6 +42,117 @@ const SPRITES = {
   title: { key: "title", sx: 102, sy: 32, sw: 93, sh: 18 },
 };
 
+const HIT_ROWS = {
+  playerIdle: [
+    [[11, 11], [18, 18]],
+    [[11, 18]],
+    [[11, 18]],
+    [[3, 18]],
+    [[2, 18]],
+    [[1, 18]],
+    [[0, 17]],
+    [[0, 16]],
+    [[2, 16]],
+    [[2, 7], [13, 17]],
+    [[3, 6], [14, 17]],
+  ],
+  playerRun: [
+    [[10, 10], [17, 17]],
+    [[11, 18]],
+    [[11, 18]],
+    [[3, 18]],
+    [[2, 18]],
+    [[0, 18]],
+    [[0, 17]],
+    [[1, 16]],
+    [[2, 16]],
+    [[3, 7], [12, 15]],
+    [[4, 7], [12, 15]],
+  ],
+  agent1: [
+    [[6, 9]],
+    [[4, 9]],
+    [[6, 9]],
+    [[5, 9]],
+    [[0, 0], [6, 9]],
+    [[0, 1], [7, 9]],
+    [[1, 2], [6, 9]],
+    [[2, 9]],
+    [[3, 8]],
+    [[5, 8]],
+    [[5, 8]],
+    [[5, 8]],
+    [[5, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[5, 8]],
+    [[5, 8]],
+  ],
+  agent2: [
+    [[6, 9]],
+    [[6, 9]],
+    [[6, 9]],
+    [[5, 9]],
+    [[0, 0], [6, 9]],
+    [[0, 1], [7, 9]],
+    [[1, 2], [6, 9]],
+    [[2, 9]],
+    [[3, 8]],
+    [[5, 8]],
+    [[5, 8]],
+    [[5, 8]],
+    [[5, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[6, 8]],
+    [[5, 8]],
+    [[5, 8]],
+  ],
+  agentFly1: [
+    [[2, 5]],
+    [[0, 6]],
+    [[2, 18]],
+    [[1, 18]],
+    [[2, 18]],
+    [[6, 11], [17, 18]],
+    [[6, 7]],
+    [[6, 7]],
+    [[5, 6]],
+    [[4, 5]],
+    [[3, 4]],
+  ],
+  agentFly2: [
+    [[1, 5]],
+    [[1, 17]],
+    [[1, 17]],
+    [[0, 17]],
+    [[1, 10], [16, 17]],
+    [[5, 6]],
+    [[5, 6]],
+    [[4, 5]],
+    [[3, 4]],
+    [[2, 3]],
+  ],
+  time: [
+    [[0, 8]],
+    [[1, 7]],
+    [[1, 7]],
+    [[2, 6]],
+    [[3, 5]],
+    [[4, 4]],
+    [[3, 5]],
+    [[2, 6]],
+    [[1, 7]],
+    [[1, 7]],
+    [[0, 8]],
+  ],
+};
+
 const images = {};
 let loadedCount = 0;
 const requiredCount = Object.keys(ASSETS).length;
@@ -55,6 +168,9 @@ let lastScoreText = "";
 let lastHighScoreText = "";
 let lastTimeHudText = "";
 let timeHudVisible = false;
+let scorePulseRemaining = 0;
+let scorePulseVisible = false;
+let highScoreBeatenThisRun = false;
 
 let scrollSpeed = 58;
 const speedRampPerSecond = 2.0;
@@ -114,6 +230,11 @@ function setHidden(element, hidden) {
   element.classList.toggle("hidden", hidden);
 }
 
+function syncGameOverStack() {
+  const shouldShow = !messageEl.classList.contains("hidden") || !finalScoreEl.classList.contains("hidden");
+  setHidden(gameOverStackEl, !shouldShow);
+}
+
 function updateHud() {
   const scoreText = padScore(score);
   const highScoreText = `HI ${padScore(sessionHighScore)}`;
@@ -127,15 +248,38 @@ function updateHud() {
   }
 }
 
+function updateScorePulse(dt = 0) {
+  if (scorePulseRemaining > 0) {
+    scorePulseRemaining = Math.max(0, scorePulseRemaining - dt);
+  }
+  const visible = scorePulseRemaining > 0;
+  if (visible !== scorePulseVisible) {
+    hudEl.classList.toggle("score-pulse", visible);
+    scorePulseVisible = visible;
+  }
+}
+
+function startScorePulse() {
+  scorePulseRemaining = 2;
+  updateScorePulse(0);
+}
+
+function stopScorePulse() {
+  scorePulseRemaining = 0;
+  updateScorePulse(0);
+}
+
 function showMessage(text) {
   setHidden(messageEl, false);
   if (messageEl.textContent !== text) {
     messageEl.textContent = text;
   }
+  syncGameOverStack();
 }
 
 function hideMessage() {
   setHidden(messageEl, true);
+  syncGameOverStack();
 }
 
 function showFinalScore(value) {
@@ -144,10 +288,12 @@ function showFinalScore(value) {
     finalScoreEl.textContent = finalScoreText;
   }
   setHidden(finalScoreEl, false);
+  syncGameOverStack();
 }
 
 function hideFinalScore() {
   setHidden(finalScoreEl, true);
+  syncGameOverStack();
 }
 
 function updateTimeHud() {
@@ -203,6 +349,7 @@ function resetRun() {
   gameOver = false;
   score = 0;
   runTime = 0;
+  highScoreBeatenThisRun = false;
   scrollSpeed = 58;
 
   promenadeOffset = 0;
@@ -229,6 +376,7 @@ function resetRun() {
   resetClouds();
   hideMessage();
   hideFinalScore();
+  stopScorePulse();
   updateTimeHud();
   updateHud();
 }
@@ -347,10 +495,6 @@ function enforceTimePickupAgentGaps(pickupX) {
   return adjustedPickupX;
 }
 
-function overlaps(a, b) {
-  return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
-}
-
 function drawSprite(sprite, dx, dy, flipX = false) {
   const image = images[sprite.key];
   if (!flipX) {
@@ -372,22 +516,58 @@ function drawRepeatedSprite(sprite, offset, y) {
   }
 }
 
-function getPlayerBox(playerSprite) {
+function getSpriteBounds(sprite, x, y) {
   return {
-    left: player.x + 2,
-    right: player.x + playerSprite.sw - 3,
-    top: playerTopY() + 1,
-    bottom: player.feetY,
+    left: x,
+    right: x + sprite.sw - 1,
+    top: y,
+    bottom: y + sprite.sh - 1,
   };
 }
 
-function getObstacleBox(obstacle) {
-  return {
-    left: obstacle.x + 1,
-    right: obstacle.x + obstacle.sprite.sw - 2,
-    top: obstacle.y + 1,
-    bottom: obstacle.y + obstacle.sprite.sh - 1,
-  };
+function isSolidAt(sprite, localX, localY, flipX = false) {
+  const rows = HIT_ROWS[sprite.key];
+  if (!rows || localY < 0 || localY >= rows.length || localX < 0 || localX >= sprite.sw) {
+    return false;
+  }
+
+  const sampleX = flipX ? sprite.sw - 1 - localX : localX;
+  const spans = rows[localY];
+  for (const [start, end] of spans) {
+    if (sampleX >= start && sampleX <= end) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function spritesCollide(aSprite, ax, ay, bSprite, bx, by, bFlipX = false) {
+  const aBounds = getSpriteBounds(aSprite, ax, ay);
+  const bBounds = getSpriteBounds(bSprite, bx, by);
+
+  const left = Math.max(aBounds.left, bBounds.left);
+  const right = Math.min(aBounds.right, bBounds.right);
+  const top = Math.max(aBounds.top, bBounds.top);
+  const bottom = Math.min(aBounds.bottom, bBounds.bottom);
+
+  if (left > right || top > bottom) {
+    return false;
+  }
+
+  for (let y = top; y <= bottom; y += 1) {
+    const aLocalY = y - ay;
+    const bLocalY = y - by;
+    for (let x = left; x <= right; x += 1) {
+      const aLocalX = x - ax;
+      const bLocalX = x - bx;
+      if (isSolidAt(aSprite, aLocalX, aLocalY) && isSolidAt(bSprite, bLocalX, bLocalY, bFlipX)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 function update(dt) {
@@ -399,6 +579,8 @@ function update(dt) {
     return;
   }
 
+  updateScorePulse(dt);
+
   if (slowEffectRemaining > 0) {
     slowEffectRemaining = Math.max(0, slowEffectRemaining - dt);
   }
@@ -408,7 +590,12 @@ function update(dt) {
 
   runTime += dt;
   score = Math.floor(runTime * 10);
-  if (score > sessionHighScore) {
+  const previousHighScore = sessionHighScore;
+  if (!highScoreBeatenThisRun && score > previousHighScore) {
+    highScoreBeatenThisRun = true;
+    startScorePulse();
+  }
+  if (score > previousHighScore) {
     sessionHighScore = score;
   }
   updateHud();
@@ -515,21 +702,15 @@ function update(dt) {
 
   if (timePickup) {
     const playerSprite = currentPlayerSprite();
-    const playerBox = getPlayerBox(playerSprite);
-    const timeBox = {
-      left: timePickup.x,
-      right: timePickup.x + SPRITES.time.sw - 1,
-      top: timePickup.y,
-      bottom: timePickup.y + SPRITES.time.sh - 1,
-    };
-    if (overlaps(playerBox, timeBox)) {
+    if (spritesCollide(playerSprite, player.x, playerTopY(), SPRITES.time, timePickup.x, timePickup.y)) {
       triggerTimePickupPickup();
     }
   }
 
   const nextObstacles = [];
   const playerSprite = currentPlayerSprite();
-  const playerBox = getPlayerBox(playerSprite);
+  const playerX = player.x;
+  const playerY = playerTopY();
   let collidedAt = -1;
   for (let i = 0; i < obstacles.length; i += 1) {
     const obstacle = obstacles[i];
@@ -539,9 +720,9 @@ function update(dt) {
     }
     nextObstacles.push(obstacle);
 
-    const obstacleBox = getObstacleBox(obstacle);
-    if (overlaps(playerBox, obstacleBox)) {
+    if (spritesCollide(playerSprite, playerX, playerY, obstacle.sprite, obstacle.x, obstacle.y, obstacle.flipX)) {
       gameOver = true;
+      stopScorePulse();
       showMessage("Game over - press Space or click to restart");
       showFinalScore(score);
       collidedAt = i;
