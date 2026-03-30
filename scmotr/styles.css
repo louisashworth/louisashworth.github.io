@@ -144,7 +144,10 @@ body {
 }
 
 .start-instruction {
+  position: absolute;
+  left: 50%;
   top: 56%;
+  transform: translateX(-50%);
   width: min(calc(100% - 1.4rem), 31rem);
   padding: 0.25rem 0.45rem;
 }
