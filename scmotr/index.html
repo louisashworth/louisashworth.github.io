@@ -14,7 +14,9 @@
           <span id="score">0000</span>
         </div>
         <div id="time-effect" class="time-hud hidden" aria-live="polite">
-          <img id="time-effect-icon" src="./SVGs/time.svg" alt="Time effect" />
+          <svg id="time-effect-icon" viewBox="43 47 9 11" aria-label="Time effect" role="img">
+            <image href="./SVGs/time.svg" width="640" height="90" />
+          </svg>
           <span id="time-effect-countdown">7.0s</span>
         </div>
         <canvas
@@ -23,7 +25,35 @@
           height="90"
           aria-label="Side scrolling jumping game"
         ></canvas>
-        <div id="start-instruction" class="message start-instruction">Press Space or click to start</div>
+        <div id="start-instruction" class="message start-instruction">
+          <div class="start-instruction-list">
+            <div class="start-instruction-item">
+              <span class="start-instruction-number">1)</span>
+              <span class="start-instruction-text">Avoid collisions with</span>
+              <svg
+                class="start-instruction-icon agent-icon"
+                viewBox="53 64 10 20"
+                aria-label="Agent obstacle"
+                role="img"
+              >
+                <image href="./SVGs/agent.svg" width="640" height="90" />
+              </svg>
+            </div>
+            <div class="start-instruction-item">
+              <span class="start-instruction-number">2)</span>
+              <span class="start-instruction-text">Hit</span>
+              <svg
+                class="start-instruction-icon time-icon"
+                viewBox="43 47 9 11"
+                aria-label="Time bonus"
+                role="img"
+              >
+                <image href="./SVGs/time.svg" width="640" height="90" />
+              </svg>
+              <span class="start-instruction-text">for a time bonus.</span>
+            </div>
+          </div>
+        </div>
         <div id="message" class="message hidden">Click or press Space to jump</div>
         <div id="final-score" class="message final-score hidden">FINAL SCORE 0000</div>
       </section>

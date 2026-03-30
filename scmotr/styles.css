@@ -48,6 +48,8 @@ body {
   right: 0.8rem;
   z-index: 10;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 0.7rem;
   padding: 0.35rem 0.6rem;
   border: 2px solid rgba(255, 255, 255, 0.32);
@@ -55,7 +57,9 @@ body {
   font-size: clamp(0.75rem, 1.8vw, 1rem);
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  max-width: calc(100% - 1rem);
   pointer-events: none;
 }
 
@@ -71,8 +75,11 @@ body {
   color: #fff4c0;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
   pointer-events: none;
-  white-space: nowrap;
-  font-size: clamp(1.3rem, 5vw, 2.7rem);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  max-width: calc(100% - 1rem);
+  font-size: clamp(0.95rem, 5vw, 2.7rem);
   font-weight: 700;
   letter-spacing: 0.03em;
 }
@@ -86,8 +93,11 @@ body {
 }
 
 .time-hud #time-effect-icon {
+  display: block;
   width: clamp(1.2rem, 3.8vw, 2.2rem);
   height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 #high-score {
@@ -106,12 +116,64 @@ body {
   color: var(--text-main);
   font-size: clamp(0.72rem, 1.7vw, 0.95rem);
   letter-spacing: 0.03em;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  max-width: calc(100% - 1rem);
   pointer-events: none;
 }
 
 .start-instruction {
-  top: 68%;
+  top: 56%;
+  width: min(calc(100% - 1.4rem), 31rem);
+  padding: 0.25rem 0.45rem;
+}
+
+.start-instruction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.start-instruction-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  line-height: 1.15;
+}
+
+.start-instruction-number {
+  color: var(--text-dim);
+}
+
+.start-instruction-icon {
+  display: block;
+  flex: 0 0 auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.agent-icon {
+  width: clamp(0.72rem, 2.5vw, 1rem);
+  height: auto;
+}
+
+.time-icon {
+  width: clamp(0.65rem, 2.2vw, 0.85rem);
+  height: auto;
+}
+
+@media (max-width: 480px) {
+  .start-instruction {
+    top: 54%;
+    font-size: clamp(0.62rem, 2.8vw, 0.78rem);
+  }
+
+  .start-instruction-list {
+    gap: 0.3rem;
+  }
 }
 
 .final-score {

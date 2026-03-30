@@ -43,11 +43,18 @@ const SPRITES = {
 const images = {};
 let loadedCount = 0;
 const requiredCount = Object.keys(ASSETS).length;
+const GROUND_AGENT_SPRITES = [SPRITES.agent1, SPRITES.agent2];
+const FLY_AGENT_SPRITES = [SPRITES.agentFly1, SPRITES.agentFly2];
+const GROUND_EPSILON = 1;
 
 let gameOver = false;
 let sessionHighScore = 0;
 let score = 0;
 let runTime = 0;
+let lastScoreText = "";
+let lastHighScoreText = "";
+let lastTimeHudText = "";
+let timeHudVisible = false;
 
 let scrollSpeed = 58;
 const speedRampPerSecond = 2.0;
@@ -69,7 +76,6 @@ const clouds = [];
 let obstacleCarry = 0;
 let obstacles = [];
 let spawnTimer = 0;
-let hasStartedOnce = false;
 let awaitingStart = true;
 let nextTimeSpawnScore = 500;
 let timePickup = null;
@@ -92,44 +98,73 @@ const player = {
   gravity: 320,
   onGround: true,
 };
+const PLAYER_AIR_TIME = (2 * Math.abs(player.jumpVelocity)) / player.gravity;
+const PLAYER_JUMP_HEIGHT =
+  (Math.abs(player.jumpVelocity) * Math.abs(player.jumpVelocity)) / (2 * player.gravity);
 
 function isGroundedState() {
-  return player.feetY >= groundY - 1 && player.velocityY >= 0;
+  return player.feetY >= groundY - GROUND_EPSILON && player.velocityY >= 0;
 }
 
 function padScore(value) {
   return String(value).padStart(4, "0");
 }
 
+function setHidden(element, hidden) {
+  element.classList.toggle("hidden", hidden);
+}
+
 function updateHud() {
-  scoreEl.textContent = padScore(score);
-  highScoreEl.textContent = `HI ${padScore(sessionHighScore)}`;
+  const scoreText = padScore(score);
+  const highScoreText = `HI ${padScore(sessionHighScore)}`;
+  if (scoreText !== lastScoreText) {
+    scoreEl.textContent = scoreText;
+    lastScoreText = scoreText;
+  }
+  if (highScoreText !== lastHighScoreText) {
+    highScoreEl.textContent = highScoreText;
+    lastHighScoreText = highScoreText;
+  }
 }
 
 function showMessage(text) {
-  messageEl.classList.remove("hidden");
-  messageEl.textContent = text;
+  setHidden(messageEl, false);
+  if (messageEl.textContent !== text) {
+    messageEl.textContent = text;
+  }
 }
 
 function hideMessage() {
-  messageEl.classList.add("hidden");
+  setHidden(messageEl, true);
 }
 
 function showFinalScore(value) {
-  finalScoreEl.textContent = `FINAL SCORE ${padScore(value)}`;
-  finalScoreEl.classList.remove("hidden");
+  const finalScoreText = `FINAL SCORE ${padScore(value)}`;
+  if (finalScoreEl.textContent !== finalScoreText) {
+    finalScoreEl.textContent = finalScoreText;
+  }
+  setHidden(finalScoreEl, false);
 }
 
 function hideFinalScore() {
-  finalScoreEl.classList.add("hidden");
+  setHidden(finalScoreEl, true);
 }
 
 function updateTimeHud() {
-  if (slowEffectRemaining > 0) {
-    timeEffectCountdownEl.textContent = `${slowEffectRemaining.toFixed(1)}s`;
-    timeEffectEl.classList.remove("hidden");
-  } else {
-    timeEffectEl.classList.add("hidden");
+  const visible = slowEffectRemaining > 0;
+  if (visible) {
+    const nextText = `${slowEffectRemaining.toFixed(1)}s`;
+    if (nextText !== lastTimeHudText) {
+      timeEffectCountdownEl.textContent = nextText;
+      lastTimeHudText = nextText;
+    }
+  }
+  if (visible !== timeHudVisible) {
+    setHidden(timeEffectEl, !visible);
+    timeHudVisible = visible;
+    if (!visible) {
+      lastTimeHudText = "";
+    }
   }
 }
 
@@ -201,8 +236,7 @@ function resetRun() {
 function handlePrimaryInput() {
   if (awaitingStart) {
     awaitingStart = false;
-    hasStartedOnce = true;
-    startInstructionEl.classList.add("hidden");
+    setHidden(startInstructionEl, true);
     hideMessage();
     hideFinalScore();
     return;
@@ -211,19 +245,20 @@ function handlePrimaryInput() {
   if (gameOver) {
     resetRun();
     awaitingStart = true;
-    startInstructionEl.classList.remove("hidden");
-    hideMessage();
-    hideFinalScore();
+    setHidden(startInstructionEl, false);
     return;
   }
 
   if (isGroundedState()) {
-    player.feetY = groundY;
-    player.verticalCarry = 0;
-    player.velocityY = 0;
-    player.onGround = false;
-    player.velocityY = player.jumpVelocity;
+    launchJump();
   }
+}
+
+function launchJump() {
+  player.feetY = groundY;
+  player.verticalCarry = 0;
+  player.velocityY = player.jumpVelocity;
+  player.onGround = false;
 }
 
 function spawnObstacle() {
@@ -241,10 +276,8 @@ function spawnObstacle() {
 }
 
 function createAgentObstacle(x, forceFly = null) {
-  const groundSprites = [SPRITES.agent1, SPRITES.agent2];
-  const flySprites = [SPRITES.agentFly1, SPRITES.agentFly2];
   const useFlySprite = forceFly === null ? score >= 600 && Math.random() < 0.35 : forceFly;
-  const spritePool = useFlySprite ? flySprites : groundSprites;
+  const spritePool = useFlySprite ? FLY_AGENT_SPRITES : GROUND_AGENT_SPRITES;
   const sprite = spritePool[randInt(0, spritePool.length - 1)];
   const y = sprite.placement === "native" ? sprite.sy : groundY - (sprite.sh - 1);
   return {
@@ -256,8 +289,7 @@ function createAgentObstacle(x, forceFly = null) {
 }
 
 function spawnTimePickup() {
-  const jumpHeight = (Math.abs(player.jumpVelocity) * Math.abs(player.jumpVelocity)) / (2 * player.gravity);
-  const apexFeetY = groundY - jumpHeight;
+  const apexFeetY = groundY - PLAYER_JUMP_HEIGHT;
   const apexTopY = Math.round(apexFeetY - (SPRITES.playerRun.sh - 1));
   timePickup = {
     x: WORLD_WIDTH + randInt(36, 90),
@@ -299,19 +331,17 @@ function enforceTimePickupAgentGaps(pickupX) {
     adjustedPickupX = nearestBefore + beforeGapPx;
   }
 
-  const ordered = obstacles
-    .map((obstacle, index) => ({ obstacle, index }))
-    .sort((a, b) => a.obstacle.x - b.obstacle.x);
+  const ordered = [...obstacles].sort((a, b) => a.x - b.x);
 
   let cursorX = adjustedPickupX + afterGapPx;
-  for (const item of ordered) {
-    if (item.obstacle.x < adjustedPickupX) {
+  for (const obstacle of ordered) {
+    if (obstacle.x < adjustedPickupX) {
       continue;
     }
-    if (item.obstacle.x < cursorX) {
-      item.obstacle.x = cursorX;
+    if (obstacle.x < cursorX) {
+      obstacle.x = cursorX;
     }
-    cursorX = item.obstacle.x + item.obstacle.sprite.sw + minAgentSpacingPx;
+    cursorX = obstacle.x + obstacle.sprite.sw + minAgentSpacingPx;
   }
 
   return adjustedPickupX;
@@ -340,6 +370,24 @@ function drawRepeatedSprite(sprite, offset, y) {
   for (let x = startX; x < WORLD_WIDTH + sprite.sw; x += sprite.sw) {
     drawSprite(sprite, x, y);
   }
+}
+
+function getPlayerBox(playerSprite) {
+  return {
+    left: player.x + 2,
+    right: player.x + playerSprite.sw - 3,
+    top: playerTopY() + 1,
+    bottom: player.feetY,
+  };
+}
+
+function getObstacleBox(obstacle) {
+  return {
+    left: obstacle.x + 1,
+    right: obstacle.x + obstacle.sprite.sw - 2,
+    top: obstacle.y + 1,
+    bottom: obstacle.y + obstacle.sprite.sh - 1,
+  };
 }
 
 function update(dt) {
@@ -418,7 +466,6 @@ function update(dt) {
 
   spawnTimer -= gameplayDt;
   if (spawnTimer <= 0) {
-    const airTime = (2 * Math.abs(player.jumpVelocity)) / player.gravity;
     if (slowEffectRemaining > 0) {
       // Suspend agent spawning entirely while the time effect is active.
       spawnTimer = rand(Math.max(0.25, slowEffectRemaining), slowEffectRemaining + 0.4);
@@ -427,7 +474,7 @@ function update(dt) {
       if (timePickup) {
         enforceTimePickupAgentGaps(timePickup.x);
       }
-      const minGap = Math.max(airTime + 0.35, 1.35 - speedFactor * 0.2);
+      const minGap = Math.max(PLAYER_AIR_TIME + 0.35, 1.35 - speedFactor * 0.2);
       const maxGap = 2.45 - speedFactor * 0.5;
       spawnTimer = rand(minGap, maxGap);
     }
@@ -440,7 +487,7 @@ function update(dt) {
   player.verticalCarry -= verticalStep;
   player.feetY += verticalStep;
 
-  if (player.feetY >= groundY - 1 && player.velocityY >= 0) {
+  if (isGroundedState()) {
     player.feetY = groundY;
     player.verticalCarry = 0;
     player.velocityY = 0;
@@ -468,12 +515,7 @@ function update(dt) {
 
   if (timePickup) {
     const playerSprite = currentPlayerSprite();
-    const playerBox = {
-      left: player.x + 2,
-      right: player.x + playerSprite.sw - 3,
-      top: playerTopY() + 1,
-      bottom: player.feetY,
-    };
+    const playerBox = getPlayerBox(playerSprite);
     const timeBox = {
       left: timePickup.x,
       right: timePickup.x + SPRITES.time.sw - 1,
@@ -486,6 +528,8 @@ function update(dt) {
   }
 
   const nextObstacles = [];
+  const playerSprite = currentPlayerSprite();
+  const playerBox = getPlayerBox(playerSprite);
   let collidedAt = -1;
   for (let i = 0; i < obstacles.length; i += 1) {
     const obstacle = obstacles[i];
@@ -495,19 +539,7 @@ function update(dt) {
     }
     nextObstacles.push(obstacle);
 
-    const playerSprite = currentPlayerSprite();
-    const playerBox = {
-      left: player.x + 2,
-      right: player.x + playerSprite.sw - 3,
-      top: playerTopY() + 1,
-      bottom: player.feetY,
-    };
-    const obstacleBox = {
-      left: obstacle.x + 1,
-      right: obstacle.x + obstacle.sprite.sw - 2,
-      top: obstacle.y + 1,
-      bottom: obstacle.y + obstacle.sprite.sh - 1,
-    };
+    const obstacleBox = getObstacleBox(obstacle);
     if (overlaps(playerBox, obstacleBox)) {
       gameOver = true;
       showMessage("Game over - press Space or click to restart");
@@ -525,7 +557,6 @@ function update(dt) {
     }
   }
   obstacles = nextObstacles;
-
 }
 
 function render() {
@@ -608,13 +639,9 @@ function startIfReady() {
   canvas.width = WORLD_WIDTH;
   canvas.height = WORLD_HEIGHT;
   ctx.imageSmoothingEnabled = false;
-  updateHud();
-  awaitingStart = true;
-  startInstructionEl.classList.remove("hidden");
   resetRun();
-  hideMessage();
-  hideFinalScore();
-  updateTimeHud();
+  awaitingStart = true;
+  setHidden(startInstructionEl, false);
   requestAnimationFrame(frame);
 }
 
