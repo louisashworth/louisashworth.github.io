@@ -148,7 +148,8 @@ body {
   left: 50%;
   top: 56%;
   transform: translateX(-50%);
-  width: min(calc(100% - 1.4rem), 31rem);
+  width: fit-content;
+  max-width: calc(100% - 1.4rem);
   padding: 0.25rem 0.45rem;
 }
 
